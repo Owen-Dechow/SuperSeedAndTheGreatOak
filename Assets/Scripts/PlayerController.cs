@@ -4,33 +4,61 @@ using UnityEngine;
 
 public class PlayerController : Controller
 {
+    [Header("Speed")]
     [SerializeField] Vector2 speed;
     [SerializeField] Vector2 clampSpeed;
     [SerializeField] float airSpeed;
+
+    [Header("Drag")]
     [SerializeField] float drag;
     [SerializeField] float airDrag;
+
+    [Header("Jumping")]
     [SerializeField] float maxJumpSeconds;
     [SerializeField] float airJumpLeewaySeconds;
-
-    [SerializeField] bool canWallJump;
-    [SerializeField] Vector2 wallJumpVelocity;
-
-    [SerializeField] bool canDash;
-    [SerializeField] float dashVelocity;
-
     float jumpSeconds;
     float fallingSeconds;
 
-    // Start is called before the first frame update
+    [Header("Wall Jumping")]
+    [SerializeField] bool canWallJump;
+    [SerializeField] Vector2 wallJumpVelocity;
+
+    [Header("Dashing")]
+    [SerializeField] bool canDash;
+    [SerializeField] float dashVelocity;
+
+    [Header("Morphing")]
+    [SerializeField] bool canShrink;
+    [SerializeField] Vector3 shrinkSize;
+    [SerializeField] float shrinkAdaptionDistance;
+    [SerializeField] float shrinkAdaptionCheckInterval;
+    Vector3 grownSize;
+    bool isShrunk;
+
+    public static Transform playerTransform;
+
     protected override void Start()
     {
         base.Start();
+        playerTransform = transform;
         jumpSeconds = maxJumpSeconds + 1;
         fallingSeconds = airJumpLeewaySeconds + 1;
+        grownSize = transform.localScale;
+        isShrunk = false;
+
+        if (Door.OverridePlayerPositionOnLoad)
+        {
+            transform.position = Door.PlayerPositionOnLoad;
+        }
+        spriteRenderer.flipX = Door.FlipPlayerOnLoad;
     }
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            GameManager.GreyScale = !GameManager.GreyScale;
+        }
+ 
         // Get player input
         Vector2 input = new(
             Input.GetAxisRaw(ControlMapping.MoveX),
@@ -53,7 +81,7 @@ public class PlayerController : Controller
                 jumpSeconds += Time.deltaTime;
                 velocity.y = speed.y;
             }
-            else if (physicsInfo.setForWallJump != 0 && canWallJump && Input.GetButtonDown(ControlMapping.MoveY))
+            else if (physicsInfo.setForWallJump != 0 && canWallJump && Input.GetButtonDown(ControlMapping.MoveY) && !isShrunk)
             {
                 velocity = new Vector2(wallJumpVelocity.x * physicsInfo.setForWallJump, wallJumpVelocity.y);
             }
@@ -85,11 +113,54 @@ public class PlayerController : Controller
             velocity.x *= airDrag;
         }
 
-
         // Clamp Speed
         velocity = new(
             Mathf.Clamp(velocity.x, -clampSpeed.x, clampSpeed.x),
             Mathf.Clamp(velocity.y, -clampSpeed.y, clampSpeed.y));
+
+        // Morph: Shrink/ Grow
+        if (Input.GetButtonDown(ControlMapping.Morph) && input.y == -1)
+        {
+            if (isShrunk)
+            {
+                transform.localScale = grownSize;
+
+                if (MorphReposition())
+                    transform.localScale = shrinkSize;
+                else
+                    isShrunk = false;
+            }
+            else
+            {
+                transform.localScale = shrinkSize;
+                isShrunk = true;
+            }
+        }
+    }
+
+    private bool MorphReposition()
+    {
+        Vector3 startPoint = transform.position;
+
+        for (float moveDis = 0; moveDis < shrinkAdaptionDistance; moveDis += PixelSize)
+        {
+            for (float rotateRadians = 0; rotateRadians <= (2 * Mathf.PI); rotateRadians += (2 * Mathf.PI) / shrinkAdaptionCheckInterval)
+            {
+                transform.position = startPoint;
+                transform.Translate(Mathf.Sin(rotateRadians) * moveDis, Mathf.Cos(rotateRadians) * moveDis, 0);
+
+                if (TouchingGroundPoint())
+                    continue;
+
+                if (TouchingGroundComplete())
+                    continue;
+
+                return false;
+            }
+        }
+
+        transform.position = startPoint;
+        return true;
     }
 
     public static class ControlMapping
@@ -99,5 +170,6 @@ public class PlayerController : Controller
         public const string Dash = "Fire1";
         public const string Fire = "Fire2";
         public const string MapToggle = "Fire3";
+        public const string Morph = "Vertical";
     }
 }

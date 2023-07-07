@@ -6,9 +6,9 @@ using static Controller;
 public class Controller : MonoBehaviour
 {
     [SerializeField] int maxSlopePerPixel;
-    protected Vector2 velocity;
-    protected BoxCollider2D boxCollider;
-    protected SpriteRenderer spriteRenderer;
+    public Vector2 velocity;
+    public BoxCollider2D boxCollider;
+    public SpriteRenderer spriteRenderer;
     protected float PixelSize { get => 1 / Level.PixelsPerUnit; }
 
     protected virtual void Start()
@@ -24,57 +24,77 @@ public class Controller : MonoBehaviour
         Vector2 point = topLeft + new Vector2(x, -y) * boxCollider.size * transform.localScale;
         point.y += boxCollider.size.y * transform.localScale.y;
 
-        Debug.DrawLine(center, point, Color.white);
-
         return point;
     }
 
-    protected bool BottomTouchingGround()
+    protected Vector2 GetBoxColliderSizeInWorldSpace()
     {
-        for (float f = 0; f <= 1; f += 0.1f)
-        {
-            if (Level.TouchingGround(GetPointOnCollider(f, 1)))
-                return true;
-        }
-        return TouchingGround();
-    }
-
-    protected bool TopTouchingGround()
-    {
-        for (float f = 0; f <= 1; f += 0.1f)
-        {
-            if (Level.TouchingGround(GetPointOnCollider(f, 0)))
-                return true;
-        }
-        return TouchingGround();
-    }
-
-    protected bool LeftTouchingGround()
-    {
-        for (float f = 0; f <= 1; f += 0.1f)
-        {
-            if (Level.TouchingGround(GetPointOnCollider(0, f)))
-                return true;
-        }
-        return TouchingGround();
+        return boxCollider.size * transform.localScale;
     }
 
     protected bool RightTouchingGround()
     {
-        for (float f = 0; f <= 1; f += 0.1f)
+        Vector2 topRight = GetPointOnCollider(1, 0);
+        float boxColliderHeight = GetBoxColliderSizeInWorldSpace().y;
+
+        for (float f = 0; f < boxColliderHeight; f += PixelSize)
         {
-            if (Level.TouchingGround(GetPointOnCollider(1, f)))
+            if (Level.TouchingGround(new Vector2(topRight.x, topRight.y - f)))
                 return true;
         }
-        return TouchingGround();
+        return TouchingGroundPoint();
     }
 
-    protected bool TouchingGround()
+    protected bool LeftTouchingGround()
+    {
+        Vector2 topLeft = GetPointOnCollider(0, 0);
+        float boxColliderHeight = GetBoxColliderSizeInWorldSpace().y;
+
+        for (float f = 0; f < boxColliderHeight; f += PixelSize)
+        {
+            if (Level.TouchingGround(new Vector2(topLeft.x, topLeft.y - f)))
+                return true;
+        }
+        return TouchingGroundPoint();
+    }
+
+    protected bool TopTouchingGround()
+    {
+        Vector2 topLeft = GetPointOnCollider(0, 0);
+        float boxColliderWidth = GetBoxColliderSizeInWorldSpace().x;
+
+        for (float f = 0; f < boxColliderWidth; f += PixelSize)
+        {
+            if (Level.TouchingGround(new Vector2(topLeft.x + f, topLeft.y)))
+                return true;
+        }
+        return TouchingGroundPoint();
+    }
+
+    protected bool BottomTouchingGround()
+    {
+        Vector2 bottomLeft = GetPointOnCollider(0, 1);
+        float boxColliderWidth = GetBoxColliderSizeInWorldSpace().x;
+
+        for (float f = 0; f < boxColliderWidth; f += PixelSize)
+        {
+            if (Level.TouchingGround(new Vector2(bottomLeft.x + f, bottomLeft.y)))
+                return true;
+        }
+        return TouchingGroundPoint();
+    }
+
+    protected bool TouchingGroundPoint()
     {
         return Level.TouchingGround(GetPointOnCollider(0, 0)) ||
             Level.TouchingGround(GetPointOnCollider(1, 0)) ||
             Level.TouchingGround(GetPointOnCollider(1, 1)) ||
             Level.TouchingGround(GetPointOnCollider(0, 1));
+    }
+
+    protected bool TouchingGroundComplete()
+    {
+        return TopTouchingGround() || BottomTouchingGround() || LeftTouchingGround() || RightTouchingGround();
     }
 
     protected PhysicsInfo UpdatePosition(float deltaTime)
@@ -133,8 +153,17 @@ public class Controller : MonoBehaviour
             velocity.x = 0;
             transform.Translate(PixelSize * deltaTime * backOutDirection, 0, 0);
             touchingGround = sideCheckFunc();
-            if (velocity.y < 0)
-                physicsInfo.setForWallJump = -1;
+        }
+
+        if (velocity.y < 0)
+        {
+            Vector3 startPos = transform.position;
+            transform.Translate(backOutDirection * -PixelSize, 0, 0);
+            if (sideCheckFunc())
+            {
+                physicsInfo.setForWallJump = (int)backOutDirection;
+            }
+            transform.position = startPos;
         }
     }
 

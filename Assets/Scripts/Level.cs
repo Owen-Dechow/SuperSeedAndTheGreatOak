@@ -26,6 +26,9 @@ public class Level : MonoBehaviour
     {
         Vector2 offsetPosition = pos + (groundSize / pixelsPerUnit / 2);
         Vector2Int intPositionOnTexture = Vector2Int.FloorToInt(offsetPosition * pixelsPerUnit);
+
+        Debug.DrawLine(PlayerController.playerTransform.position, pos);
+
         return groundTexture.GetPixel(intPositionOnTexture.x, intPositionOnTexture.y).a != 0;
     }
 
