@@ -1017,14 +1017,15 @@ MonoBehaviour:
   maxJumpSeconds: 0.2
   airJumpLeewaySeconds: 0.1
   canHighJump: 0
-  canWallJump: 1
+  canWallJump: 0
   wallJumpVelocity: {x: 0.8, y: 1.75}
-  canDash: 1
+  canDash: 0
   dashVelocity: 3
-  canShrink: 1
+  canShrink: 0
   shrinkSize: {x: 0.02, y: 0.02, z: 1}
   shrinkAdaptionDistance: 0.05
   shrinkAdaptionCheckInterval: 10
+  life: 0
 --- !u!50 &7752172568836634568
 Rigidbody2D:
   serializedVersion: 4

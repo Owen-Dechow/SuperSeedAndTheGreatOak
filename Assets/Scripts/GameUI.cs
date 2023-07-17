@@ -21,9 +21,8 @@ public class GameUI : MonoBehaviour
         hueShiftMaterial.SetFloat("_Shift", (hueShiftMaterial.GetFloat("_Shift") + hueShiftSpeed * Time.fixedDeltaTime) % 1);
     }
 
-    public static int SetLifeMeter(int life)
+    public static void SetLifeMeter(int life)
     {
         instance.slider.value = life;
-        return (int)instance.slider.value;
     }
 }

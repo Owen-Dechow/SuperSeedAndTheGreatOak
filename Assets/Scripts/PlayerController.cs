@@ -39,6 +39,11 @@ public class PlayerController : Controller
 
     [Header("Stats")]
     public int life;
+    public int maxLife;
+    public bool triShot;
+    public bool laserBeam;
+    public bool phaserShot;
+    public bool shield;
 
     public static Transform playerTransform;
 
@@ -120,7 +125,7 @@ public class PlayerController : Controller
         }
         else
         {
-            if (Input.GetButtonDown(ControlMapping.Dash))
+            if (Input.GetButtonDown(ControlMapping.Dash) && canDash)
                 velocity.x = dashVelocity * input.x;
 
             velocity.x += airSpeed * input.x;
@@ -133,7 +138,7 @@ public class PlayerController : Controller
             Mathf.Clamp(velocity.y, -clampSpeed.y, clampSpeed.y));
 
         // Morph: Shrink/ Grow
-        if (Input.GetButtonDown(ControlMapping.Morph) && input.y == -1)
+        if (Input.GetButtonDown(ControlMapping.Morph) && input.y == -1 && canShrink)
         {
             if (isShrunk)
             {
@@ -152,7 +157,8 @@ public class PlayerController : Controller
         }
 
         // Set life meter
-        life = GameUI.SetLifeMeter(life);
+        life = Mathf.Clamp(life, 0, maxLife);
+        GameUI.SetLifeMeter(life);
     }
 
     private bool MorphReposition()
