@@ -24,6 +24,7 @@ public class Door : MonoBehaviour
     {
         if (collision.collider.CompareTag("Player"))
         {
+            GameManager.CollectPlayer(collision.collider.GetComponent<PlayerController>());
             SceneManager.LoadScene(levelNumber - 1);
 
             FlipPlayerOnLoad = playerDirectionOnLoad == PlayerDirection.Left;

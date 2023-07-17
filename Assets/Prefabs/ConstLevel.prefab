@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1707017a3f646ea43a702348efebe9ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  greyScaleMaterial: {fileID: 2100000, guid: c6876855747d28c4a80d2011bf09d5d5, type: 2}
+  gameManager: {fileID: 8139904010224420048, guid: 26bb2ac7f48b82246aa1bff61526d3cd, type: 3}
 --- !u!1 &3986329741725807892
 GameObject:
   m_ObjectHideFlags: 0
@@ -313,7 +313,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: c6876855747d28c4a80d2011bf09d5d5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1016,6 +1016,7 @@ MonoBehaviour:
   airDrag: 0.99
   maxJumpSeconds: 0.2
   airJumpLeewaySeconds: 0.1
+  canHighJump: 0
   canWallJump: 1
   wallJumpVelocity: {x: 0.8, y: 1.75}
   canDash: 1

@@ -16,24 +16,29 @@ public class PlayerController : Controller
     [Header("Jumping")]
     [SerializeField] float maxJumpSeconds;
     [SerializeField] float airJumpLeewaySeconds;
+    public bool canHighJump;
+    float MaxJumpSeconds { get => canHighJump ? maxJumpSeconds : 0; }
     float jumpSeconds;
     float fallingSeconds;
 
     [Header("Wall Jumping")]
-    [SerializeField] bool canWallJump;
+    public bool canWallJump;
     [SerializeField] Vector2 wallJumpVelocity;
 
     [Header("Dashing")]
-    [SerializeField] bool canDash;
+    public bool canDash;
     [SerializeField] float dashVelocity;
 
     [Header("Morphing")]
-    [SerializeField] bool canShrink;
+    public bool canShrink;
     [SerializeField] Vector3 shrinkSize;
     [SerializeField] float shrinkAdaptionDistance;
     [SerializeField] float shrinkAdaptionCheckInterval;
     Vector3 grownSize;
     bool isShrunk;
+
+    [Header("Stats")]
+    public int life;
 
     public static Transform playerTransform;
 
@@ -41,7 +46,7 @@ public class PlayerController : Controller
     {
         base.Start();
         playerTransform = transform;
-        jumpSeconds = maxJumpSeconds + 1;
+        jumpSeconds = MaxJumpSeconds + 1;
         fallingSeconds = airJumpLeewaySeconds + 1;
         grownSize = transform.localScale;
         isShrunk = false;
@@ -51,6 +56,15 @@ public class PlayerController : Controller
             transform.position = Door.PlayerPositionOnLoad;
         }
         spriteRenderer.flipX = Door.FlipPlayerOnLoad;
+
+        if (GameManager.PlayerCollection != null)
+        {
+            canHighJump = GameManager.PlayerCollection.canHighJump;
+            canWallJump = GameManager.PlayerCollection.canWallJump;
+            canDash = GameManager.PlayerCollection.canDash;
+            canShrink = GameManager.PlayerCollection.canShrink;
+            life = GameManager.PlayerCollection.life;
+        }
     }
 
     void Update()
@@ -76,7 +90,7 @@ public class PlayerController : Controller
         // Jump/ wall jump
         if (input.y > 0)
         {
-            if (jumpSeconds <= maxJumpSeconds)
+            if (jumpSeconds <= MaxJumpSeconds)
             {
                 jumpSeconds += Time.deltaTime;
                 velocity.y = speed.y;
@@ -94,7 +108,7 @@ public class PlayerController : Controller
             }
             else
             {
-                jumpSeconds = maxJumpSeconds + 1;
+                jumpSeconds = MaxJumpSeconds + 1;
             }
         }
 
@@ -136,6 +150,9 @@ public class PlayerController : Controller
                 isShrunk = true;
             }
         }
+
+        // Set life meter
+        life = GameUI.SetLifeMeter(life);
     }
 
     private bool MorphReposition()

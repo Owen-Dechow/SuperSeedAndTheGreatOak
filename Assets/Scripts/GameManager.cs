@@ -7,8 +7,12 @@ public class GameManager : MonoBehaviour
 {
     static GameManager instance;
 
-    public static bool GreyScale { get => GreyScaleMaterial.GetFloat("_Saturation") == 0; set => GreyScaleMaterial.SetFloat("_Saturation", value ? 0 : 1); }
-    public static Material GreyScaleMaterial { get; set; }
+    public static bool GreyScale { get => instance.greyScale; set => SetGreyScale(value); }
+    public static PlayerCollectionData PlayerCollection { get; private set; }
+    public static bool GameManagerExists { get => instance != null; }
+
+    [SerializeField] Material[] greyScaleMaterials;
+    bool greyScale;
 
     void Start()
     {
@@ -16,13 +20,35 @@ public class GameManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    // Build a Game Manager if none exists
-    public static bool BuildGameManager()
+    public static void SetGreyScale(bool to)
     {
-        if (instance)
-            return false;
+        instance.greyScale = to;
+        foreach (Material material in instance.greyScaleMaterials)
+        {
+            material.SetFloat("_Saturation", to ? 0 : 1);
+        }
+    }
 
-        _ = new GameObject("GameManager", typeof(GameManager));
-        return true;
+    public static void CollectPlayer(PlayerController player)
+    {
+        PlayerCollection = new PlayerCollectionData(player.canHighJump, player.canWallJump, player.canDash, player.canShrink, player.life);
+    }
+
+    public class PlayerCollectionData
+    {
+        public bool canHighJump { get; private set; }
+        public bool canWallJump {get; private set;}
+        public bool canDash { get; private set; }
+        public bool canShrink { get; private set; }
+        public int life { get; private set; }
+
+        public PlayerCollectionData(bool canHighJump, bool canWallJump, bool canDash, bool canShrink, int life)
+        {
+            this.canHighJump = canHighJump;
+            this.canWallJump = canWallJump;
+            this.canDash = canDash;
+            this.canShrink = canShrink;
+            this.life = life;
+        }
     }
 }

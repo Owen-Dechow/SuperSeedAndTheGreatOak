@@ -4,13 +4,15 @@ using UnityEngine;
 
 public class GMLoader : MonoBehaviour
 {
-    [SerializeField] Material greyScaleMaterial;
+    [SerializeField] GameObject gameManager;
 
     void Start()
     {
-        if (GameManager.BuildGameManager())
+        if (!GameManager.GameManagerExists)
         {
-            GameManager.GreyScaleMaterial = greyScaleMaterial;
+            GameObject go = Instantiate(gameManager);
+            go.name = "GameManager";
         }
+        Destroy(gameObject);
     }
 }
