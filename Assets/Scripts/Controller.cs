@@ -6,9 +6,9 @@ using static Controller;
 public class Controller : MonoBehaviour
 {
     [SerializeField] int maxSlopePerPixel;
-    public Vector2 velocity;
-    public BoxCollider2D boxCollider;
-    public SpriteRenderer spriteRenderer;
+    protected Vector2 velocity;
+    protected BoxCollider2D boxCollider;
+    protected SpriteRenderer spriteRenderer;
     protected float PixelSize { get => 1 / Level.PixelsPerUnit; }
 
     protected virtual void Start()
@@ -97,7 +97,7 @@ public class Controller : MonoBehaviour
         return TopTouchingGround() || BottomTouchingGround() || LeftTouchingGround() || RightTouchingGround();
     }
 
-    protected PhysicsInfo UpdatePosition(float deltaTime)
+    protected PhysicsInfo UpdatePosition()
     {
         PhysicsInfo physicsInfo = new();
 
@@ -108,12 +108,12 @@ public class Controller : MonoBehaviour
             spriteRenderer.flipX = true;
 
         // Move Y
-        transform.Translate(0, velocity.y * deltaTime, 0);
+        transform.Translate(0, velocity.y * Time.deltaTime, 0);
         if (velocity.y < 0)
         {
             while (BottomTouchingGround())
             {
-                transform.Translate(0, PixelSize * deltaTime, 0);
+                transform.Translate(0, PixelSize * Time.deltaTime, 0);
                 velocity.y = 0;
                 physicsInfo.feetOnGround = true;
             }
@@ -122,36 +122,36 @@ public class Controller : MonoBehaviour
         {
             while (TopTouchingGround())
             {
-                transform.Translate(0, -PixelSize * deltaTime, 0);
+                transform.Translate(0, -PixelSize * Time.deltaTime, 0);
                 velocity.y = 0;
                 physicsInfo.hitHead = true;
             }
         }
 
         // Move X
-        transform.Translate(velocity.x * deltaTime, 0, 0);
+        transform.Translate(velocity.x * Time.deltaTime, 0, 0);
         if (velocity.x < 0)
         {
-            MoveX(deltaTime, 1, LeftTouchingGround, ref physicsInfo);
+            MoveX(1, LeftTouchingGround, ref physicsInfo);
         }
         else
         {
-            MoveX(deltaTime, -1, RightTouchingGround, ref physicsInfo);
+            MoveX(-1, RightTouchingGround, ref physicsInfo);
         }
 
         return physicsInfo;
     }
 
-    private void MoveX(float deltaTime, float backOutDirection, System.Func<bool> sideCheckFunc, ref PhysicsInfo physicsInfo)
+    private void MoveX(float backOutDirection, System.Func<bool> sideCheckFunc, ref PhysicsInfo physicsInfo)
     {
         bool touchingGround = sideCheckFunc();
         if (touchingGround)
-            touchingGround = ExitSlope(sideCheckFunc, deltaTime);
+            touchingGround = ExitSlope(sideCheckFunc);
 
         while (touchingGround)
         {
             velocity.x = 0;
-            transform.Translate(PixelSize * deltaTime * backOutDirection, 0, 0);
+            transform.Translate(PixelSize * Time.deltaTime * backOutDirection, 0, 0);
             touchingGround = sideCheckFunc();
         }
 
@@ -167,10 +167,10 @@ public class Controller : MonoBehaviour
         }
     }
 
-    private bool ExitSlope(System.Func<bool> sideCheckFunc, float deltaTime)
+    private bool ExitSlope(System.Func<bool> sideCheckFunc)
     {
         bool touchingGround = true;
-        int maxSlope = Mathf.CeilToInt(Mathf.Abs(velocity.x) * deltaTime / Level.PixelsPerUnit) * maxSlopePerPixel;
+        int maxSlope = Mathf.CeilToInt(Mathf.Abs(velocity.x) * Time.deltaTime / Level.PixelsPerUnit) * maxSlopePerPixel;
 
         for (int i = 0; i < maxSlope; i++)
         {

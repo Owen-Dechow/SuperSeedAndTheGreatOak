@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class PlayerController : Controller
 {
-    [Header("Speed")]
-    [SerializeField] Vector2 speed;
-    [SerializeField] Vector2 clampSpeed;
-    [SerializeField] float airSpeed;
-
-    [Header("Drag")]
+    [Header("X Movement")]
+    public bool lag;
+    [SerializeField] float walkSpeed;
+    [SerializeField] float xSpeedClamp;
     [SerializeField] float drag;
-    [SerializeField] float airDrag;
 
-    [Header("Jumping")]
+
+    [Header("Y Movement")]
+    [SerializeField] float jumpVelocity;
+    [SerializeField] float ySpeedClamp;
     [SerializeField] float maxJumpSeconds;
     [SerializeField] float airJumpLeewaySeconds;
     public bool canHighJump;
@@ -37,13 +37,17 @@ public class PlayerController : Controller
     Vector3 grownSize;
     bool isShrunk;
 
-    [Header("Stats")]
-    public int life;
-    public int maxLife;
+    [Header("Shooting")]
+    [SerializeField] GameObject bulletPrefab;
     public bool triShot;
     public bool laserBeam;
     public bool phaserShot;
+
+    [Header("Stats")]
+    public int life;
+    public int maxLife;
     public bool shield;
+
 
     public static Transform playerTransform;
 
@@ -74,6 +78,17 @@ public class PlayerController : Controller
 
     void Update()
     {
+        if (lag)
+        {
+            for (int i = 0; i < 10000; i++)
+            {
+                for (int j = 0; j < 10000; j++)
+                {
+
+                }
+            }
+        }
+
         if (Input.GetKeyDown(KeyCode.Space)) {
             GameManager.GreyScale = !GameManager.GreyScale;
         }
@@ -84,10 +99,10 @@ public class PlayerController : Controller
             Input.GetAxisRaw(ControlMapping.MoveY));
 
         // Run physics
-        Controller.PhysicsInfo physicsInfo = UpdatePosition(Time.deltaTime);
+        PhysicsInfo physicsInfo = base.UpdatePosition();
 
         // Update falling
-        velocity.y -= 0.01f;
+        velocity.y -= Level.Gravity * Time.deltaTime;
         if (physicsInfo.feetOnGround) fallingSeconds = 0;
         else if (physicsInfo.hitHead) fallingSeconds = airJumpLeewaySeconds + 1;
         else fallingSeconds += Time.deltaTime;
@@ -98,7 +113,7 @@ public class PlayerController : Controller
             if (jumpSeconds <= MaxJumpSeconds)
             {
                 jumpSeconds += Time.deltaTime;
-                velocity.y = speed.y;
+                velocity.y = jumpVelocity;
             }
             else if (physicsInfo.setForWallJump != 0 && canWallJump && Input.GetButtonDown(ControlMapping.MoveY) && !isShrunk)
             {
@@ -118,24 +133,15 @@ public class PlayerController : Controller
         }
 
         // Move x
-        if (physicsInfo.feetOnGround)
-        {
-            velocity.x += speed.x * input.x;
-            velocity.x *= drag;
-        }
-        else
-        {
-            if (Input.GetButtonDown(ControlMapping.Dash) && canDash)
-                velocity.x = dashVelocity * input.x;
-
-            velocity.x += airSpeed * input.x;
-            velocity.x *= airDrag;
-        }
+        velocity.x += walkSpeed * input.x * Time.deltaTime;
+        velocity.x += (0 - velocity.x) * drag * Time.deltaTime;
+        if (Input.GetButtonDown(ControlMapping.Dash) && canDash)
+            velocity.x = dashVelocity * (spriteRenderer.flipX ? -1 : 1);
 
         // Clamp Speed
         velocity = new(
-            Mathf.Clamp(velocity.x, -clampSpeed.x, clampSpeed.x),
-            Mathf.Clamp(velocity.y, -clampSpeed.y, clampSpeed.y));
+            Mathf.Clamp(velocity.x, -xSpeedClamp, xSpeedClamp),
+            Mathf.Clamp(velocity.y, -ySpeedClamp, ySpeedClamp));
 
         // Morph: Shrink/ Grow
         if (Input.GetButtonDown(ControlMapping.Morph) && input.y == -1 && canShrink)
@@ -159,6 +165,23 @@ public class PlayerController : Controller
         // Set life meter
         life = Mathf.Clamp(life, 0, maxLife);
         GameUI.SetLifeMeter(life);
+
+        // Shooting
+        if (Input.GetButtonDown(ControlMapping.Fire) && triShot)
+        {
+            GameObject go = Instantiate(bulletPrefab);
+            Bullet bullet = go.GetComponent<Bullet>();
+
+            Bullet.PowerLevel powerLevel;
+            if (phaserShot)
+                powerLevel = Bullet.PowerLevel.PhaserShot;
+            else if (laserBeam)
+                powerLevel = Bullet.PowerLevel.LaserBeam;
+            else
+                powerLevel = Bullet.PowerLevel.TriShot;
+
+            bullet.PlaceBullet(transform.position, spriteRenderer.flipX ? -1 : 1, powerLevel);
+        }
     }
 
     private bool MorphReposition()

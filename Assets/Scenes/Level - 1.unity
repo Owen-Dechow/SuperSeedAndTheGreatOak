@@ -786,15 +786,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7752172567844993029, guid: 5c3e5de0c87887a4795785329b3ae3af, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.6071495
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7752172567844993029, guid: 5c3e5de0c87887a4795785329b3ae3af, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.94928867
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7752172567844993029, guid: 5c3e5de0c87887a4795785329b3ae3af, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.00659965
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7752172567844993029, guid: 5c3e5de0c87887a4795785329b3ae3af, type: 3}
       propertyPath: m_LocalRotation.w
@@ -823,6 +823,18 @@ PrefabInstance:
     - target: {fileID: 7752172567844993029, guid: 5c3e5de0c87887a4795785329b3ae3af, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7752172568836634569, guid: 5c3e5de0c87887a4795785329b3ae3af, type: 3}
+      propertyPath: triShot
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7752172568836634569, guid: 5c3e5de0c87887a4795785329b3ae3af, type: 3}
+      propertyPath: laserBeam
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7752172568836634569, guid: 5c3e5de0c87887a4795785329b3ae3af, type: 3}
+      propertyPath: phaserShot
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c3e5de0c87887a4795785329b3ae3af, type: 3}

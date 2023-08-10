@@ -367,3 +367,6 @@ MonoBehaviour:
   greyScaleMaterials:
   - {fileID: 2100000, guid: c6876855747d28c4a80d2011bf09d5d5, type: 2}
   - {fileID: 2100000, guid: a748670a96c5776408b7f996839d1faf, type: 2}
+  - {fileID: 2100000, guid: 1c04beaec59e0774da4f5615cf24aa25, type: 2}
+  laserMaterial: {fileID: 2100000, guid: 1c04beaec59e0774da4f5615cf24aa25, type: 2}
+  laserMaterialShiftSpeed: 5

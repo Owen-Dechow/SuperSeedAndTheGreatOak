@@ -236,6 +236,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1592377780, guid: 5c3e5de0c87887a4795785329b3ae3af, type: 3}
+      propertyPath: powerLevel
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 5654626684077212191, guid: 5c3e5de0c87887a4795785329b3ae3af, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -296,6 +300,10 @@ PrefabInstance:
       propertyPath: groundTexture
       value: 
       objectReference: {fileID: 2800000, guid: 73ec50887ed27b7458bdfa68754f70e0, type: 3}
+    - target: {fileID: 7752172568099213625, guid: 5c3e5de0c87887a4795785329b3ae3af, type: 3}
+      propertyPath: groundTextureBlocked
+      value: 
+      objectReference: {fileID: 2800000, guid: 5b616c9e70015094daded1dc3f16e0fa, type: 3}
     - target: {fileID: 7752172568185308429, guid: 5c3e5de0c87887a4795785329b3ae3af, type: 3}
       propertyPath: m_Sprite
       value: 

@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour
     public static bool GameManagerExists { get => instance != null; }
 
     [SerializeField] Material[] greyScaleMaterials;
+    [SerializeField] Material laserMaterial;
+    [SerializeField] float laserMaterialShiftSpeed;
     bool greyScale;
 
     void Start()
@@ -50,5 +52,10 @@ public class GameManager : MonoBehaviour
             this.canShrink = canShrink;
             this.life = life;
         }
+    }
+
+    private void FixedUpdate()
+    {
+        laserMaterial.SetFloat("_Shift", Time.time * laserMaterialShiftSpeed % 1);
     }
 }
