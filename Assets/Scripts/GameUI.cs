@@ -16,9 +16,15 @@ public class GameUI : MonoBehaviour
     [SerializeField] CanvasGroup crossFadeCanvasGroup;
     [SerializeField] float transitionSeconds;
 
+    [Header("Text box")]
+    [SerializeField] GameObject textBox;
+    [SerializeField] TMPro.TextMeshProUGUI textMeshPro;
+    [SerializeField] float typingPauseSeconds;
+
     private void Start()
     {
         instance = this;
+        textBox.SetActive(false);
     }
 
     void FixedUpdate()
@@ -60,4 +66,19 @@ public class GameUI : MonoBehaviour
         }
     }
 
+    public static IEnumerator TextBox(string text)
+    {
+        yield return new WaitForEndOfFrame();
+        instance.textBox.SetActive(true);
+        instance.textMeshPro.text = "";
+
+        foreach (char letter in text)
+        {
+            instance.textMeshPro.text += letter;
+            yield return new WaitForSecondsRealtime(instance.typingPauseSeconds);
+        }
+
+        yield return new WaitUntil(() => Input.GetButtonDown(PlayerController.ControlMapping.Select));
+        instance.textBox.SetActive(false);
+    }
 }

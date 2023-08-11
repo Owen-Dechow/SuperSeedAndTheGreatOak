@@ -76,21 +76,6 @@ public class PlayerController : Controller
 
     void Update()
     {
-        if (lag)
-        {
-            for (int i = 0; i < 10000; i++)
-            {
-                for (int j = 0; j < 10000; j++)
-                {
-
-                }
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            GameManager.GreyScale = !GameManager.GreyScale;
-        }
- 
         // Get player input
         Vector2 input = new(
             Input.GetAxisRaw(ControlMapping.MoveX),
@@ -215,5 +200,6 @@ public class PlayerController : Controller
         public const string Fire = "Fire2";
         public const string MapToggle = "Fire3";
         public const string Morph = "Vertical";
+        public const string Select = "Submit";
     }
 }
