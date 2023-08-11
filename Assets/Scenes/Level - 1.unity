@@ -824,17 +824,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7752172568836634569, guid: 5c3e5de0c87887a4795785329b3ae3af, type: 3}
-      propertyPath: triShot
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7752172568836634569, guid: 5c3e5de0c87887a4795785329b3ae3af, type: 3}
-      propertyPath: laserBeam
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7752172568836634569, guid: 5c3e5de0c87887a4795785329b3ae3af, type: 3}
-      propertyPath: phaserShot
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c3e5de0c87887a4795785329b3ae3af, type: 3}

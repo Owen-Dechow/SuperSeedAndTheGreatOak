@@ -1273,8 +1273,8 @@ MonoBehaviour:
   triShot: 0
   laserBeam: 0
   phaserShot: 0
-  life: 0
-  maxLife: 0
+  life: 15
+  maxLife: 15
   shield: 0
 --- !u!50 &7752172568836634568
 Rigidbody2D:

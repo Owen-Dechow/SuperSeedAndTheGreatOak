@@ -33,24 +33,26 @@ public class GameManager : MonoBehaviour
 
     public static void CollectPlayer(PlayerController player)
     {
-        PlayerCollection = new PlayerCollectionData(player.canHighJump, player.canWallJump, player.canDash, player.canShrink, player.life);
+        PlayerCollection = new PlayerCollectionData(player.canHighJump, player.canWallJump, player.canDash, player.canShrink, player.life, player.maxLife);
     }
 
     public class PlayerCollectionData
     {
-        public bool canHighJump { get; private set; }
-        public bool canWallJump {get; private set;}
-        public bool canDash { get; private set; }
-        public bool canShrink { get; private set; }
-        public int life { get; private set; }
+        public bool CanHighJump { get; private set; }
+        public bool CanWallJump {get; private set;}
+        public bool CanDash { get; private set; }
+        public bool CanShrink { get; private set; }
+        public int Life { get; private set; }
+        public int MaxLife { get; private set; }
 
-        public PlayerCollectionData(bool canHighJump, bool canWallJump, bool canDash, bool canShrink, int life)
+        public PlayerCollectionData(bool canHighJump, bool canWallJump, bool canDash, bool canShrink, int life, int maxLife)
         {
-            this.canHighJump = canHighJump;
-            this.canWallJump = canWallJump;
-            this.canDash = canDash;
-            this.canShrink = canShrink;
-            this.life = life;
+            this.CanHighJump = canHighJump;
+            this.CanWallJump = canWallJump;
+            this.CanDash = canDash;
+            this.CanShrink = canShrink;
+            this.Life = life;
+            this.MaxLife = maxLife;
         }
     }
 

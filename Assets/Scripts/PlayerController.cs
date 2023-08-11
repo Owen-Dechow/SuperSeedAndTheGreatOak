@@ -68,11 +68,12 @@ public class PlayerController : Controller
 
         if (GameManager.PlayerCollection != null)
         {
-            canHighJump = GameManager.PlayerCollection.canHighJump;
-            canWallJump = GameManager.PlayerCollection.canWallJump;
-            canDash = GameManager.PlayerCollection.canDash;
-            canShrink = GameManager.PlayerCollection.canShrink;
-            life = GameManager.PlayerCollection.life;
+            canHighJump = GameManager.PlayerCollection.CanHighJump;
+            canWallJump = GameManager.PlayerCollection.CanWallJump;
+            canDash = GameManager.PlayerCollection.CanDash;
+            canShrink = GameManager.PlayerCollection.CanShrink;
+            life = GameManager.PlayerCollection.Life;
+            maxLife = GameManager.PlayerCollection.MaxLife;
         }
     }
 

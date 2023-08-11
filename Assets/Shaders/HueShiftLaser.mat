@@ -39,6 +39,6 @@ Material:
     m_Ints: []
     m_Floats:
     - _Saturation: 1
-    - _Shift: 0.79998016
+    - _Shift: 0.0000019073486
     m_Colors: []
   m_BuildTextureStacks: []
