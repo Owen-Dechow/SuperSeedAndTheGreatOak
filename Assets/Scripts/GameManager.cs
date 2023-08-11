@@ -16,6 +16,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] float laserMaterialShiftSpeed;
     bool greyScale;
 
+    public enum GameLevel
+    {
+        Tree = 0,
+        Mine = 1,
+        Factory = 2,
+        Cloud = 3
+    }
+
     void Start()
     {
         instance = this;
@@ -31,21 +39,30 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public static void CollectPlayer(PlayerController player)
+    public static void CollectPlayer(PlayerController player, Door.PlayerDirection playerDirectionOnLoad, Vector2? playerLocationOnLoad)
     {
-        PlayerCollection = new PlayerCollectionData(player.canHighJump, player.canWallJump, player.canDash, player.canShrink, player.life, player.maxLife);
+        PlayerCollection = new PlayerCollectionData(player.canHighJump,
+            player.canWallJump,
+            player.canDash,
+            player.canShrink,
+            player.life,
+            player.maxLife,
+            playerDirectionOnLoad,
+            playerLocationOnLoad);
     }
 
     public class PlayerCollectionData
     {
         public bool CanHighJump { get; private set; }
-        public bool CanWallJump {get; private set;}
+        public bool CanWallJump { get; private set; }
         public bool CanDash { get; private set; }
         public bool CanShrink { get; private set; }
         public int Life { get; private set; }
         public int MaxLife { get; private set; }
+        public Door.PlayerDirection PlayerDirectionOnLoad { get; private set; }
+        public Vector2? PlayerLocationOnLoad { get; private set; }
 
-        public PlayerCollectionData(bool canHighJump, bool canWallJump, bool canDash, bool canShrink, int life, int maxLife)
+        public PlayerCollectionData(bool canHighJump, bool canWallJump, bool canDash, bool canShrink, int life, int maxLife, Door.PlayerDirection playerDirectionOnLoad, Vector2? playerLocationOnLoad)
         {
             this.CanHighJump = canHighJump;
             this.CanWallJump = canWallJump;
@@ -53,11 +70,27 @@ public class GameManager : MonoBehaviour
             this.CanShrink = canShrink;
             this.Life = life;
             this.MaxLife = maxLife;
+            PlayerDirectionOnLoad = playerDirectionOnLoad;
+            PlayerLocationOnLoad = playerLocationOnLoad;
         }
     }
 
     private void FixedUpdate()
     {
         laserMaterial.SetFloat("_Shift", Time.time * laserMaterialShiftSpeed % 1);
+    }
+
+    public static void LoadLevel(GameLevel level)
+    {
+        instance.StartCoroutine(LoadLevelAnimated(level));
+    }
+
+    static IEnumerator LoadLevelAnimated(GameLevel level)
+    {
+        Time.timeScale = 0;
+        yield return GameUI.ToggleSceneTransition(true);
+        SceneManager.LoadScene((int)level);
+        yield return GameUI.ToggleSceneTransition(false);
+        Time.timeScale = 1;
     }
 }

@@ -18,10 +18,16 @@ public class CameraController : MonoBehaviour
 
     void Start()
     {
-        if (Door.OverridePlayerPositionOnLoad)
-            transform.position = new Vector3(Door.PlayerPositionOnLoad.x, Door.PlayerPositionOnLoad.y, transform.position.z);
+        if (GameManager.PlayerCollection != null && GameManager.PlayerCollection.PlayerLocationOnLoad != null)
+        {
+            Vector3 position = (Vector3)GameManager.PlayerCollection.PlayerLocationOnLoad;
+            position.z = transform.position.z;
+            transform.position = position;
+        }
         else
+        {
             transform.position = TargetPosition;
+        }
 
         background.localScale = backgroundSize;
         UpdateBackgroundPosition();

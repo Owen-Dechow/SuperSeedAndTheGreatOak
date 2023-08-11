@@ -405,6 +405,10 @@ PrefabInstance:
       value: Door (Level - 4)
       objectReference: {fileID: 0}
     - target: {fileID: 4183738832871052310, guid: e0beb4f2b03d18d4ebc99f04e3ad88c3, type: 3}
+      propertyPath: level
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4183738832871052310, guid: e0beb4f2b03d18d4ebc99f04e3ad88c3, type: 3}
       propertyPath: levelNumber
       value: 4
       objectReference: {fileID: 0}
@@ -468,6 +472,10 @@ PrefabInstance:
     - target: {fileID: 2698105096672315880, guid: e0beb4f2b03d18d4ebc99f04e3ad88c3, type: 3}
       propertyPath: m_Name
       value: Door (Level - 3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4183738832871052310, guid: e0beb4f2b03d18d4ebc99f04e3ad88c3, type: 3}
+      propertyPath: level
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4183738832871052310, guid: e0beb4f2b03d18d4ebc99f04e3ad88c3, type: 3}
       propertyPath: levelNumber
@@ -653,6 +661,10 @@ PrefabInstance:
     - target: {fileID: 2698105096672315880, guid: e0beb4f2b03d18d4ebc99f04e3ad88c3, type: 3}
       propertyPath: m_Name
       value: Door (Level - 2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4183738832871052310, guid: e0beb4f2b03d18d4ebc99f04e3ad88c3, type: 3}
+      propertyPath: level
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4183738832871052310, guid: e0beb4f2b03d18d4ebc99f04e3ad88c3, type: 3}
       propertyPath: loadScene

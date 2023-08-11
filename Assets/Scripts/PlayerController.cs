@@ -60,12 +60,6 @@ public class PlayerController : Controller
         grownSize = transform.localScale;
         isShrunk = false;
 
-        if (Door.OverridePlayerPositionOnLoad)
-        {
-            transform.position = Door.PlayerPositionOnLoad;
-        }
-        spriteRenderer.flipX = Door.FlipPlayerOnLoad;
-
         if (GameManager.PlayerCollection != null)
         {
             canHighJump = GameManager.PlayerCollection.CanHighJump;
@@ -74,6 +68,9 @@ public class PlayerController : Controller
             canShrink = GameManager.PlayerCollection.CanShrink;
             life = GameManager.PlayerCollection.Life;
             maxLife = GameManager.PlayerCollection.MaxLife;
+            spriteRenderer.flipX = GameManager.PlayerCollection.PlayerDirectionOnLoad == Door.PlayerDirection.Left;
+            if (GameManager.PlayerCollection.PlayerLocationOnLoad != null)
+                transform.position = (Vector3)GameManager.PlayerCollection.PlayerLocationOnLoad;
         }
     }
 
