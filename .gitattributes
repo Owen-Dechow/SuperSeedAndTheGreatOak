@@ -2,4 +2,4 @@
 * text=auto
 
 # Remove Text mesh pro from linguist
-Assets/TextMesh?Pro/* linguist-vendored
+Assets/TextMesh?Pro/** linguist-vendored
