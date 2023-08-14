@@ -222,6 +222,18 @@ PrefabInstance:
       propertyPath: PlayerPropertyName
       value: shield
       objectReference: {fileID: 0}
+    - target: {fileID: 5178312025731109331, guid: 21f4f328c822cc64cbcc56751edf094f, type: 3}
+      propertyPath: textMessage.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5178312025731109331, guid: 21f4f328c822cc64cbcc56751edf094f, type: 3}
+      propertyPath: textMessage.Array.data[0]
+      value: Sheild
+      objectReference: {fileID: 0}
+    - target: {fileID: 5178312025731109331, guid: 21f4f328c822cc64cbcc56751edf094f, type: 3}
+      propertyPath: textMessage.Array.data[1]
+      value: Damage is reduced by 50%.
+      objectReference: {fileID: 0}
     - target: {fileID: 5178312025731109341, guid: 21f4f328c822cc64cbcc56751edf094f, type: 3}
       propertyPath: m_Name
       value: Shield

@@ -8,7 +8,7 @@
 (*) Create gun
 (*) Create scene transition
 (*) Create ui system
-[-] Update powerups to use ui system
+(*) Update powerups to use ui system
 [-] Create npcs
 [-] Create enemies
 [-] Create life up

@@ -182,9 +182,21 @@ PrefabInstance:
       propertyPath: PlayerPropertyName
       value: canWallJump
       objectReference: {fileID: 0}
+    - target: {fileID: 5178312025731109331, guid: 21f4f328c822cc64cbcc56751edf094f, type: 3}
+      propertyPath: textMessage.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5178312025731109331, guid: 21f4f328c822cc64cbcc56751edf094f, type: 3}
+      propertyPath: textMessage.Array.data[0]
+      value: Wall Jump
+      objectReference: {fileID: 0}
+    - target: {fileID: 5178312025731109331, guid: 21f4f328c822cc64cbcc56751edf094f, type: 3}
+      propertyPath: textMessage.Array.data[1]
+      value: Press up arrow to jump off of wall.
+      objectReference: {fileID: 0}
     - target: {fileID: 5178312025731109341, guid: 21f4f328c822cc64cbcc56751edf094f, type: 3}
       propertyPath: m_Name
-      value: PowerUp
+      value: WallJump
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5178312025731109330, guid: 21f4f328c822cc64cbcc56751edf094f, type: 3}

@@ -41,35 +41,21 @@ public class GameManager : MonoBehaviour
 
     public static void CollectPlayer(PlayerController player, Door.PlayerDirection playerDirectionOnLoad, Vector2? playerLocationOnLoad)
     {
-        PlayerCollection = new PlayerCollectionData(player.canHighJump,
-            player.canWallJump,
-            player.canDash,
-            player.canShrink,
-            player.life,
-            player.maxLife,
+        PlayerCollection = new PlayerCollectionData(
+            player.stats,
             playerDirectionOnLoad,
             playerLocationOnLoad);
     }
 
     public class PlayerCollectionData
     {
-        public bool CanHighJump { get; private set; }
-        public bool CanWallJump { get; private set; }
-        public bool CanDash { get; private set; }
-        public bool CanShrink { get; private set; }
-        public int Life { get; private set; }
-        public int MaxLife { get; private set; }
+        public PlayerController.PlayerStats Stats { get; private set; }
         public Door.PlayerDirection PlayerDirectionOnLoad { get; private set; }
         public Vector2? PlayerLocationOnLoad { get; private set; }
 
-        public PlayerCollectionData(bool canHighJump, bool canWallJump, bool canDash, bool canShrink, int life, int maxLife, Door.PlayerDirection playerDirectionOnLoad, Vector2? playerLocationOnLoad)
+        public PlayerCollectionData(PlayerController.PlayerStats stats, Door.PlayerDirection playerDirectionOnLoad, Vector2? playerLocationOnLoad)
         {
-            this.CanHighJump = canHighJump;
-            this.CanWallJump = canWallJump;
-            this.CanDash = canDash;
-            this.CanShrink = canShrink;
-            this.Life = life;
-            this.MaxLife = maxLife;
+            Stats = stats;
             PlayerDirectionOnLoad = playerDirectionOnLoad;
             PlayerLocationOnLoad = playerLocationOnLoad;
         }

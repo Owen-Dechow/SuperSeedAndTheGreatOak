@@ -1252,7 +1252,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxSlopePerPixel: 2
-  lag: 0
   walkSpeed: 6
   xSpeedClamp: 6
   drag: 15
@@ -1260,22 +1259,23 @@ MonoBehaviour:
   ySpeedClamp: 2
   maxJumpSeconds: 0.2
   airJumpLeewaySeconds: 0.1
-  canHighJump: 0
-  canWallJump: 0
-  wallJumpVelocity: {x: 2, y: 1.5}
-  canDash: 0
-  dashVelocity: 6
-  canShrink: 0
   shrinkSize: {x: 0.02, y: 0.02, z: 1}
   shrinkAdaptionDistance: 0.05
   shrinkAdaptionCheckInterval: 10
+  Stats:
+    life: 15
+    maxLife: 15
+    canHighJump: 0
+    canWallJump: 0
+    canDash: 0
+    canShrink: 0
+    shield: 0
+    triShot: 0
+    laserBeam: 0
+    phaserShot: 0
+  wallJumpVelocity: {x: 2, y: 1.5}
+  dashVelocity: 6
   bulletPrefab: {fileID: 6612815321046303732, guid: be6b5295bdb0fb4479609f544d24daef, type: 3}
-  triShot: 0
-  laserBeam: 0
-  phaserShot: 0
-  life: 15
-  maxLife: 15
-  shield: 0
 --- !u!50 &7752172568836634568
 Rigidbody2D:
   serializedVersion: 4

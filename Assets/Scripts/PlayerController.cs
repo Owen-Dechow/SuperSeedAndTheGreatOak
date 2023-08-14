@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlayerController : Controller
 {
     [Header("X Movement")]
-    public bool lag;
     [SerializeField] float walkSpeed;
     [SerializeField] float xSpeedClamp;
     [SerializeField] float drag;
@@ -16,38 +15,39 @@ public class PlayerController : Controller
     [SerializeField] float ySpeedClamp;
     [SerializeField] float maxJumpSeconds;
     [SerializeField] float airJumpLeewaySeconds;
-    public bool canHighJump;
-    float MaxJumpSeconds { get => canHighJump ? maxJumpSeconds : 0; }
+    float MaxJumpSeconds { get => stats.canHighJump ? maxJumpSeconds : 0; }
     float jumpSeconds;
     float fallingSeconds;
 
-    [Header("Wall Jumping")]
-    public bool canWallJump;
-    [SerializeField] Vector2 wallJumpVelocity;
-
-    [Header("Dashing")]
-    public bool canDash;
-    [SerializeField] float dashVelocity;
-
     [Header("Morphing")]
-    public bool canShrink;
     [SerializeField] Vector3 shrinkSize;
     [SerializeField] float shrinkAdaptionDistance;
     [SerializeField] float shrinkAdaptionCheckInterval;
     Vector3 grownSize;
     bool isShrunk;
 
-    [Header("Shooting")]
+    [Header("")]
+    public PlayerStats stats;
+
+    [Header("Static")]
+    [SerializeField] Vector2 wallJumpVelocity;
+    [SerializeField] float dashVelocity;
     [SerializeField] GameObject bulletPrefab;
-    public bool triShot;
-    public bool laserBeam;
-    public bool phaserShot;
 
-    [Header("Stats")]
-    public int life;
-    public int maxLife;
-    public bool shield;
-
+    [System.Serializable]
+    public class PlayerStats
+    {
+        public int life;
+        public int maxLife;
+        public bool canHighJump;
+        public bool canWallJump;
+        public bool canDash;
+        public bool canShrink;
+        public bool shield;
+        public bool triShot;
+        public bool laserBeam;
+        public bool phaserShot;
+    }
 
     public static Transform playerTransform;
 
@@ -59,16 +59,13 @@ public class PlayerController : Controller
         fallingSeconds = airJumpLeewaySeconds + 1;
         grownSize = transform.localScale;
         isShrunk = false;
+        velocity = Vector2.zero;
 
         if (GameManager.PlayerCollection != null)
         {
-            canHighJump = GameManager.PlayerCollection.CanHighJump;
-            canWallJump = GameManager.PlayerCollection.CanWallJump;
-            canDash = GameManager.PlayerCollection.CanDash;
-            canShrink = GameManager.PlayerCollection.CanShrink;
-            life = GameManager.PlayerCollection.Life;
-            maxLife = GameManager.PlayerCollection.MaxLife;
+            stats = GameManager.PlayerCollection.Stats;
             spriteRenderer.flipX = GameManager.PlayerCollection.PlayerDirectionOnLoad == Door.PlayerDirection.Left;
+
             if (GameManager.PlayerCollection.PlayerLocationOnLoad != null)
                 transform.position = (Vector3)GameManager.PlayerCollection.PlayerLocationOnLoad;
         }
@@ -98,7 +95,7 @@ public class PlayerController : Controller
                 jumpSeconds += Time.deltaTime;
                 velocity.y = jumpVelocity;
             }
-            else if (physicsInfo.setForWallJump != 0 && canWallJump && Input.GetButtonDown(ControlMapping.MoveY) && !isShrunk)
+            else if (physicsInfo.setForWallJump != 0 && stats.canWallJump && Input.GetButtonDown(ControlMapping.MoveY) && !isShrunk)
             {
                 velocity = new Vector2(wallJumpVelocity.x * physicsInfo.setForWallJump, wallJumpVelocity.y);
             }
@@ -118,7 +115,7 @@ public class PlayerController : Controller
         // Move x
         velocity.x += walkSpeed * input.x * Time.deltaTime;
         velocity.x += (0 - velocity.x) * drag * Time.deltaTime;
-        if (Input.GetButtonDown(ControlMapping.Dash) && canDash)
+        if (Input.GetButtonDown(ControlMapping.Dash) && stats.canDash)
             velocity.x = dashVelocity * (spriteRenderer.flipX ? -1 : 1);
 
         // Clamp Speed
@@ -127,7 +124,7 @@ public class PlayerController : Controller
             Mathf.Clamp(velocity.y, -ySpeedClamp, ySpeedClamp));
 
         // Morph: Shrink/ Grow
-        if (Input.GetButtonDown(ControlMapping.Morph) && input.y == -1 && canShrink)
+        if (Input.GetButtonDown(ControlMapping.Morph) && input.y == -1 && stats.canShrink)
         {
             if (isShrunk)
             {
@@ -146,19 +143,19 @@ public class PlayerController : Controller
         }
 
         // Set life meter
-        life = Mathf.Clamp(life, 0, maxLife);
-        GameUI.SetLifeMeter(life);
+        stats.life = Mathf.Clamp(stats.life, 0, stats.maxLife);
+        GameUI.SetLifeMeter(stats.life);
 
         // Shooting
-        if (Input.GetButtonDown(ControlMapping.Fire) && triShot)
+        if (Input.GetButtonDown(ControlMapping.Fire) && stats.triShot)
         {
             GameObject go = Instantiate(bulletPrefab);
             Bullet bullet = go.GetComponent<Bullet>();
 
             Bullet.PowerLevel powerLevel;
-            if (phaserShot)
+            if (stats.phaserShot)
                 powerLevel = Bullet.PowerLevel.PhaserShot;
-            else if (laserBeam)
+            else if (stats.laserBeam)
                 powerLevel = Bullet.PowerLevel.LaserBeam;
             else
                 powerLevel = Bullet.PowerLevel.TriShot;
@@ -202,4 +199,5 @@ public class PlayerController : Controller
         public const string Morph = "Vertical";
         public const string Select = "Submit";
     }
+
 }
