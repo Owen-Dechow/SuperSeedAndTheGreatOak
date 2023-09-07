@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class NPC : MonoBehaviour
 {
-    [SerializeField] bool move;
-    [SerializeField] string[] text;
-    [SerializeField] string[] greyscaleText;
+    public bool move;
+    public string[] text;
+    public string[] greyscaleText;
+    public bool overrideToFunction;
+    public string functionName;
 
     // Start is called before the first frame update
     void Start()
